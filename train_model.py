@@ -10,31 +10,37 @@ from features import make_features
 
 # Load data
 script_dir = os.path.dirname(os.path.abspath(__file__))
-parquet_path = os.path.join(script_dir, 'combined_matches.parquet')
+parquet_path = os.path.join(script_dir, "combined_matches.parquet")
 df_raw = pd.read_parquet(parquet_path)
 
 # Feature engineering
 df_features = make_features(df_raw)
 
 # Extract year from tourney_id
-df_features['year'] = df_features['tourney_id'].astype(str).str[:4].astype(int)
+df_features["year"] = df_features["tourney_id"].astype(str).str[:4].astype(int)
 
 # Keep only matches from last 2 years
-df_features = df_features[df_features['year'] >= 2023]
+df_features = df_features[df_features["year"] >= 2023]
 
 # Have player identification
-encoder = OneHotEncoder(handle_unknown='ignore', sparse_output=False)
-X_players = encoder.fit_transform(df_features[['player_1', 'player_2']])
+encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
+X_players = encoder.fit_transform(df_features[["player_1", "player_2"]])
 
 # Use only numeric features
-X_numeric = df_features[[
-    'player_rank', 'opponent_rank',
-    'player_height', 'opponent_height',
-    'surface_Hard', 'surface_Clay', 'surface_Grass'
-]].values
+X_numeric = df_features[
+    [
+        "player_rank",
+        "opponent_rank",
+        "player_height",
+        "opponent_height",
+        "surface_Hard",
+        "surface_Clay",
+        "surface_Grass",
+    ]
+].values
 
 X = np.hstack([X_players, X_numeric])
-y = df_features['target'].values
+y = df_features["target"].values
 # Train/test splits
 n_runs = 5
 accs = []
