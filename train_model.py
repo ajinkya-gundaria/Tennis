@@ -30,13 +30,17 @@ X_players = encoder.fit_transform(df_features[['player_1', 'player_2']])
 X_numeric = df_features[[
     'player_rank', 'opponent_rank',
     'player_height', 'opponent_height',
-    'surface_Hard', 'surface_Clay', 'surface_Grass'
+    'surface_Hard', 'surface_Clay', 'surface_Grass',
+    'best_of', 'minutes', 'bpSaved',
+    'bpFaced', 'opp_bpSaved', 'opp_bpFaced', 'first_serve_win_pct',
+    'second_serve_win_pct', 'first_serve_in_pct', 'ace_rate', 'df_rate', 
+    'opp_first_serve_win_pct', 'opp_second_serve_win_pct', 'opp_first_serve_in_pct', 'opp_ace_rate', 'opp_df_rate',
 ]].values
 
 X = np.hstack([X_players, X_numeric])
 y = df_features['target'].values
 # Train/test splits
-n_runs = 5
+n_runs = 1
 accs = []
 losses = []
 
